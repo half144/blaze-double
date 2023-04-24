@@ -1,19 +1,14 @@
-import { Item, items } from "@/constants";
+import { items } from "@/constants";
 import { Ball } from "../Ball";
-import { forwardRef } from "react";
+import { useDouble } from "../../hooks/useDouble";
 
-type DoubleProps = {
-  translateX: number;
-  history: number[];
-  time: number;
-  isRunning: boolean;
-};
+export const Double = () => {
+  const { areaRef, translateX, history, time, isRunning } = useDouble();
 
-export const Double = forwardRef((props: DoubleProps, ref: any) => {
   return (
     <div className="flex items-center flex-col gap-2 w-full md:w-1/2 md:h-full justify-center">
       <div className="flex gap-2">
-        {props.history?.map((item) => (
+        {history?.map((item) => (
           <Ball
             size={30}
             color={
@@ -29,13 +24,13 @@ export const Double = forwardRef((props: DoubleProps, ref: any) => {
         ))}
       </div>
       <div
-        ref={ref}
+        ref={areaRef}
         className="border relative border-gray-700 rounded-md w-full overflow-hidden h-3/4 flex items-center"
       >
         <div
           className={`transition-all border border-gray-700 pl-4 duration-[4000ms] ease-in-out`}
           style={{
-            transform: `translateX(${props.translateX}px)`,
+            transform: `translateX(${translateX}px)`,
           }}
         >
           <div className="gap-3 py-5 flex ">
@@ -52,12 +47,12 @@ export const Double = forwardRef((props: DoubleProps, ref: any) => {
 
         <div
           className={`w-full h-full top-0 flex items-center justify-center absolute ${
-            props.isRunning && "bg-black bg-opacity-60"
+            isRunning && "bg-black bg-opacity-60"
           }`}
         >
-          {props.isRunning ? (
+          {isRunning ? (
             <div className="flex flex-col items-center justify-center">
-              <p className="text-white font-bold text-2xl">{props.time}</p>
+              <p className="text-white font-bold text-2xl">{time}</p>
             </div>
           ) : (
             <div className="h-full w-1 bg-opacity-40 rounded-md bg-white absolute top-0"></div>
@@ -66,4 +61,4 @@ export const Double = forwardRef((props: DoubleProps, ref: any) => {
       </div>
     </div>
   );
-});
+};

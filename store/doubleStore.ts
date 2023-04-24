@@ -1,26 +1,31 @@
 import { create } from "zustand";
 
-type LocalUserStore = {
-  balance: number;
+type UseDoubleStore = {
+  bet: number;
   isBeting: boolean;
+  isRunning: boolean;
   selectedColor: string;
   setSelectedColor: (color: string) => void;
+  setIsRunning: (isRunning: boolean) => void;
   setIsBeting: (isBet: boolean) => void;
-  increaseToBalance: (ammount: number) => void;
+  setBet: (bet: number) => void;
 };
 
-export const useLocalUserStore = create<LocalUserStore>((set) => ({
-  balance: 500,
+export const useDoubleStore = create<UseDoubleStore>((set) => ({
+  bet: 0,
   isBeting: false,
   selectedColor: "red",
+  isRunning: false,
+  setIsRunning: (isRunning) => {
+    set({ isRunning });
+  },
   setSelectedColor: (color) => {
     set({ selectedColor: color });
   },
   setIsBeting: (isBet) => {
     set({ isBeting: isBet });
   },
-  increaseToBalance: (ammount) =>
-    set((state) => ({
-      balance: state.balance + ammount,
-    })),
+  setBet: (bet) => {
+    set({ bet });
+  },
 }));

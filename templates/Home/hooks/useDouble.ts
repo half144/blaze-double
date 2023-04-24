@@ -1,29 +1,31 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useArea } from "./useArea";
-import { items } from "@/constants";
 import { useLocalUserStore } from "@/store/localUserStore";
 import { useTimer } from "@/hooks/useTimer";
+import { useDoubleStore } from "@/store/doubleStore";
+import { generateRandomNumber } from "@/functions";
 
 export const useDouble = () => {
-  const [bet, setBet] = useState(0);
-  const [selectedColor, setSelectedColor] = useState<string>("red");
   const [current, setCurrent] = useState<number>(0);
   const [history, setHistory] = useState<number[]>([0]);
-  const [isBeting, setIsBeting] = useState<boolean>(false);
-  const { areaRef, handleMove, translateX } = useArea(current);
+  const bet = useDoubleStore((state) => state.bet);
+  const setBet = useDoubleStore((state) => state.setBet);
+  const selectedColor = useDoubleStore((state) => state.selectedColor);
+  const balance = useLocalUserStore((state) => state.balance);
   const increaseToBalance = useLocalUserStore(
     (state) => state.increaseToBalance
   );
-  const balance = useLocalUserStore((state) => state.balance);
-  const { start, isRunning, reset, time } = useTimer(10);
+  const isBeting = useDoubleStore((state) => state.isBeting);
+  const setIsBeting = useDoubleStore((state) => state.setIsBeting);
+  const setIsRunning = useDoubleStore((state) => state.setIsRunning);
+  const isRunning = useDoubleStore((state) => state.isRunning);
+  const { start, reset, time } = useTimer(10, setIsRunning);
+  const { areaRef, handleMove, translateX } = useArea(current);
 
   const handleBet = useCallback(() => {
     if (bet > balance) setBet(balance);
     if (isBeting) increaseToBalance(-bet);
-    const randomNumber = Math.floor(Math.random() * 30);
-    const randomRow = Math.floor(Math.random() * 4);
-    const result = randomNumber + 31 * randomRow;
-    const color = items[result + 1].color;
+    const { result, color, randomNumber } = generateRandomNumber();
 
     setCurrent(result);
     handleMove(result, true);
@@ -54,14 +56,8 @@ export const useDouble = () => {
 
   return {
     areaRef,
-    bet,
-    setBet,
     history,
     translateX,
-    setIsBeting,
-    isBeting,
-    selectedColor,
-    setSelectedColor,
     time,
     isRunning,
   };

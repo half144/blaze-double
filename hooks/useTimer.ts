@@ -1,12 +1,16 @@
 import { useRef, useState } from "react";
 
-export const useTimer = (initial: number) => {
+export const useTimer = (
+  initial: number,
+  runningControl: (isRunning: boolean) => void
+) => {
   const [time, setTime] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
   const interval = useRef<NodeJS.Timeout>();
 
   const start = () => {
     if (interval.current) return;
+    runningControl(true);
     setIsRunning(true);
 
     interval.current = setInterval(() => {
@@ -15,7 +19,7 @@ export const useTimer = (initial: number) => {
   };
 
   const stop = () => {
-    setIsRunning(false);
+    runningControl(false);
     clearInterval(interval.current);
     interval.current = undefined;
   };

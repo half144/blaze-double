@@ -1,40 +1,19 @@
 import { colors } from "@/constants";
 import { Button } from "../Buttons";
-import { useLocalUserStore } from "@/store/localUserStore";
+import { useControls } from "./hooks/useControls";
 
-type ControlsProps = {
-  bet: number;
-  selectedColor: string;
-  setSelectedColor: (color: string) => void;
-  handleBetting: () => void;
-  isRunning: boolean;
-  time: number;
-  isBeting: boolean;
-  setBet: (amount: number) => void;
-};
-
-export const Controls = ({
-  bet,
-  selectedColor,
-  setSelectedColor,
-  isBeting,
-  isRunning,
-  setBet,
-  handleBetting,
-}: ControlsProps) => {
-  const balance = useLocalUserStore((state) => state.balance);
-
-  const updateBet = (amount: number) => {
-    if (isNaN(Number(amount))) return;
-    if (Number(amount) < 0) return;
-    if (Number(amount) > balance) return setBet(balance);
-
-    setBet(amount);
-  };
-
-  const handleAmount = (e: any) => {
-    updateBet(Number(e.target.value));
-  };
+export const Controls = () => {
+  const {
+    balance,
+    bet,
+    handleAmount,
+    updateBet,
+    selectedColor,
+    setSelectedColor,
+    setIsBeting,
+    isBeting,
+    isRunning,
+  } = useControls();
 
   return (
     <div className="border border-gray-700 w-full p-5 md:w-1/3 flex items-center rounded-md">
@@ -79,7 +58,7 @@ export const Controls = ({
           ))}
         </div>
         <button
-          onClick={handleBetting}
+          onClick={() => setIsBeting(!isBeting)}
           disabled={isBeting || bet == 0 || !isRunning || bet > balance}
           className="bg-red-700 text-white font-bold py-3 px-5 rounded-md mt-5 disabled:opacity-50"
         >
