@@ -6,7 +6,7 @@ type LocalUserStore = {
 };
 
 export const useLocalUserStore = create<LocalUserStore>((set) => ({
-  balance: 5,
+  balance: 500,
   increaseToBalance: (ammount) =>
     set((state) => ({
       balance: state.balance + ammount,
