@@ -7,7 +7,7 @@ type BallProps = {
 
 export const Ball = ({ color, textColor, number, size }: BallProps) => (
   <div
-    className={`h-[${size}px] w-[70}px] flex items-center justify-center rounded-md ${color}`}
+    className={`h-[${size}px] w-[70px] flex items-center justify-center rounded-md ${color}`}
   >
     <p className={`rounded-full font-bold ${color} ${textColor}`}>{number}</p>
   </div>
